@@ -12,6 +12,10 @@ struct ContentView: View {
     @Environment(\.modelContext) private var modelContext
     @Query private var items: [Item]
     
+    @State private var isAddingItem = false
+    @State private var newItemDate = Date()
+    @State private var newTaskCount = ""
+    
     var body: some View {
         NavigationSplitView {
             VStack {
@@ -58,7 +62,7 @@ struct ContentView: View {
                     EditButton()
                 }
                 ToolbarItem {
-                    Button(action: addItem) {
+                    Button(action: { isAddingItem = true }) {
                         Label("Add Item", systemImage: "plus")
                     }
                 }
@@ -68,12 +72,34 @@ struct ContentView: View {
         } detail: {
             Text("Select an item")
         }
+        .sheet(isPresented: $isAddingItem) {
+            VStack {
+                Text("Add New Session")
+                    .font(.headline)
+                DatePicker("Date", selection: $newItemDate, displayedComponents: .date)
+                    .padding()
+                TextField("Enter math tasks completed", text: $newTaskCount)
+                    .keyboardType(.numberPad)
+                    .padding()
+                    .textFieldStyle(RoundedBorderTextFieldStyle())
+                Button("Add Session") {
+                    addItem()
+                    isAddingItem = false
+                }
+                .buttonStyle(.borderedProminent)
+                .padding()
+            }
+            .padding()
+        }
     }
 
     private func addItem() {
         withAnimation {
-            let newItem = Item(timestamp: Date())
+            let taskCount = Int(newTaskCount) ?? 0
+            let newItem = Item(timestamp: newItemDate, mathTasksCompleted: taskCount)
             modelContext.insert(newItem)
+            // Reset input fields
+            newTaskCount = ""
         }
     }
 
@@ -92,14 +118,13 @@ struct ContentView: View {
         
         let nextMay12 = may12 > currentDate ? may12 : calendar.date(byAdding: .year, value: 1, to: may12) ?? may12
         
-        return calendar.dateComponents([.day, .hour, .minute], from: currentDate, to: nextMay12)
+        return calendar.dateComponents([.day, .hour], from: currentDate, to: nextMay12)
     }
     
     private func timeRemainingFormatted() -> String {
         let remainingTime = timeRemainingUntilMay12()
         let days = remainingTime.day ?? 0
         let hours = remainingTime.hour ?? 0
-        let minutes = remainingTime.minute ?? 0
         
         return "\(days) days, \(hours) hours"
     }
