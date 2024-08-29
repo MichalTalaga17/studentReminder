@@ -4,6 +4,7 @@
 //
 //  Created by Michał Talaga on 29/08/2024.
 //
+
 import SwiftUI
 import SwiftData
 
@@ -23,49 +24,58 @@ struct ContentView: View {
     var body: some View {
         NavigationSplitView {
             VStack {
-                Text("Czas pozostały do 12 maja:")
-                    .font(.headline)
-                Text(timeRemainingFormatted())
-                    .font(.largeTitle)
-                    .padding()
+                VStack(alignment: .leading, spacing: 10) {
+                    Text("Czas pozostały do 12 maja:")
+                        .font(.headline)
+                        .foregroundColor(.primary)
+                    Text(timeRemainingFormatted())
+                        .font(.largeTitle)
+                        .fontWeight(.bold)
+                        .foregroundColor(.accentColor)
+                    
+                    Text("Łączna liczba wykonanych zadań: \(totalTasksCompleted)")
+                        .font(.headline)
+                        .foregroundColor(.primary)
+                }
+                .padding()
+                .background(Color(UIColor.systemGroupedBackground))
+                .cornerRadius(10)
+                .padding()
                 
-                Text("Łączna liczba wykonanych zadań: \(totalTasksCompleted)")
-                    .font(.headline)
-                    .padding()
-                    .background(Color.green.opacity(0.1))
-                    .cornerRadius(10)
-                    .padding()
-            }
-            .padding()
-            .background(Color.blue.opacity(0.1))
-            .cornerRadius(10)
-            .padding()
-            
-            List {
-                ForEach(items) { item in
-                    NavigationLink {
-                        VStack {
-                            Text("Data: \(formatDate(item.timestamp))")
-                                .font(.headline)
-                            Text("Zadania: \(item.mathTasksCompleted)")
-                                .font(.title2)
-                        }
-                        .padding()
-                    } label: {
-                        HStack {
-                            VStack(alignment: .leading) {
+                List {
+                    ForEach(items) { item in
+                        NavigationLink {
+                            VStack(alignment: .leading, spacing: 10) {
                                 Text("Data: \(formatDate(item.timestamp))")
                                     .font(.headline)
+                                    .foregroundColor(.primary)
                                 Text("Zadania: \(item.mathTasksCompleted)")
-                                    .font(.subheadline)
-                                    .foregroundColor(.gray)
+                                    .font(.title2)
+                                    .foregroundColor(.accentColor)
                             }
-                            Spacer()
+                            .padding()
+                            .background(Color(UIColor.secondarySystemGroupedBackground))
+                            .cornerRadius(8)
+                        } label: {
+                            HStack {
+                                VStack(alignment: .leading, spacing: 5) {
+                                    Text("Data: \(formatDate(item.timestamp))")
+                                        .font(.headline)
+                                        .foregroundColor(.primary)
+                                    Text("Zadania: \(item.mathTasksCompleted)")
+                                        .font(.subheadline)
+                                        .foregroundColor(.gray)
+                                }
+                                Spacer()
+                            }
+                            .padding()
+                            .background(Color(UIColor.systemBackground))
+                            .cornerRadius(8)
                         }
-                        .padding()
                     }
+                    .onDelete(perform: deleteItems)
                 }
-                .onDelete(perform: deleteItems)
+                .listStyle(.insetGrouped)
             }
             .toolbar {
                 ToolbarItem(placement: .navigationBarTrailing) {
@@ -74,6 +84,7 @@ struct ContentView: View {
                 ToolbarItem {
                     Button(action: { isAddingItem = true }) {
                         Label("Dodaj Sesję", systemImage: "plus")
+                            .foregroundColor(.blue)
                     }
                 }
             }
@@ -83,7 +94,7 @@ struct ContentView: View {
             Text("Wybierz element")
         }
         .sheet(isPresented: $isAddingItem) {
-            VStack {
+            VStack(spacing: 20) {
                 Text("Dodaj Nową Sesję")
                     .font(.headline)
                 DatePicker("Data", selection: $newItemDate, displayedComponents: .date)
@@ -100,6 +111,8 @@ struct ContentView: View {
                 .padding()
             }
             .padding()
+            .background(Color(UIColor.systemBackground))
+            .cornerRadius(10)
         }
     }
 
