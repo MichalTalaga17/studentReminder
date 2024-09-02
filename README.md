@@ -2,6 +2,20 @@
 
 `studentReminder` is an iOS application designed to help users track their progress on math tasks and keep track of important deadlines. The app features a countdown to May 12 and allows users to manage their task sessions effectively.
 
+
+## Demos
+<p float="left">
+  <img src="https://github.com/MichalTalaga17/studentReminder/blob/main/demo1.png" width="20%" />
+  <img src="https://github.com/MichalTalaga17/studentReminder/blob/main/demo3.png" width="20%" />
+  <img src="https://github.com/MichalTalaga17/studentReminder/blob/main/demo4.png" width="20%" />
+  <img src="https://github.com/MichalTalaga17/studentReminder/blob/main/demo5.png" width="20%" />
+</p>
+
+
+https://github.com/user-attachments/assets/6dcb84a7-4eef-4f50-a750-f9793adbd71e
+
+
+
 ## Features
 
 - Countdown timer displaying time remaining until May 12 in days and hours.
